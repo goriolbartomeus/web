@@ -1,5 +1,3 @@
-/* styles.css */
-
 /* General Reset */
 * {
   margin: 0;
@@ -14,16 +12,20 @@ body {
   line-height: 1.6;
 }
 
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  background: #3c004f;
+  background-color: #3c004f;
+  padding: 15px 0;
 }
 
 header h1 {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: #ffc107;
 }
 
@@ -31,77 +33,54 @@ header h1 span {
   color: #fff;
 }
 
-header ul {
+header nav ul {
   list-style: none;
   display: flex;
-  gap: 15px;
+  justify-content: space-around;
 }
 
-header ul li a {
+header nav ul li a {
   text-decoration: none;
   color: #fff;
   font-weight: 600;
+  padding: 5px 15px;
 }
 
 #hero {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 40px 20px;
+  justify-content: space-between;
+  padding: 50px 0;
 }
 
-.hero-content h1 {
-  font-size: 2.5rem;
+.hero-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hero-content .text h1 {
   color: #ffc107;
 }
 
-.hero-content h1 span {
-  color: #fff;
-}
-
-.hero-content p {
-  margin: 15px 0;
-}
-
-.hero-content .buttons a {
-  text-decoration: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-}
-
-.btn {
+.hero-content .buttons .btn {
   background: #ffc107;
+  padding: 10px 20px;
   color: #2c003f;
 }
 
-.btn-secondary {
-  background: transparent;
-  color: #ffc107;
+.hero-content .btn-secondary {
   border: 2px solid #ffc107;
 }
 
-#services .services-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+#services {
+  text-align: center;
+  background: #4a0064;
 }
 
 .service-card {
-  background: #4a0064;
+  background: #3c004f;
   padding: 20px;
   border-radius: 10px;
 }
 
-footer {
-  text-align: center;
-  padding: 20px;
-  background: #3c004f;
-  margin-top: 20px;
-}
-
-.social-links a {
-  margin: 0 10px;
-  text-decoration: none;
-  color: #ffc107;
-}
-
+/* Add any customizations as needed for My Work & Footer sections */
