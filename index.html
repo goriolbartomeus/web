@@ -1,72 +1,96 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Página de bienvenida y portafolio personal">
-    <meta name="author" content="Tu Nombre">
-    <title>Mi Portafolio</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Bienvenido a mi Portafolio</h1>
-            <p>Hola, soy [Tu Nombre], un apasionado de [Tu Profesión].</p>
+    <!-- Header Section -->
+    <header class="header">
+        <nav class="navbar">
+            <h1>Omar <span class="highlight">ALAQUI DAHBI</span></h1>
+            <ul class="nav-links">
+                <li><a href="#about" data-lang="about">About</a></li>
+                <li><a href="#services" data-lang="services">Services</a></li>
+                <li><a href="#skills" data-lang="skills">My Skills</a></li>
+                <li><a href="#work" data-lang="work">My Work</a></li>
+                <li><a href="#contact" data-lang="contact">Contact Me</a></li>
+            </ul>
+            <button id="language-toggle" class="language-btn">ES</button>
+        </nav>
+        <div class="hero">
+            <div class="hero-text">
+                <p data-lang="intro-hello">Hello, My name is</p>
+                <h2>Omar <span class="highlight">ALAQUI DAHBI</span></h2>
+                <h3 data-lang="intro-description">I'm a Graphic designer & Frontend developer.</h3>
+                <div class="cta-buttons">
+                    <a href="#" class="btn primary" data-lang="download-cv">Download CV</a>
+                    <a href="#" class="btn secondary" data-lang="lets-talk">Let's Talk</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <!-- Imagen del avatar (puedes reemplazarlo) -->
+                <img src="avatar.png" alt="Avatar">
+            </div>
         </div>
     </header>
 
-    <nav>
-        <ul class="nav-list">
-            <li><a href="#sobre-mi">Sobre mí</a></li>
-            <li><a href="#proyectos">Proyectos</a></li>
-            <li><a href="#contacto">Contacto</a></li>
-        </ul>
-    </nav>
+    <!-- About Section -->
+    <section id="about" class="about">
+        <h2 data-lang="about-title">About Me</h2>
+        <p data-lang="about-description">
+            Passionate about graphic design and frontend development, I combine creativity and technical skills to create impactful visual experiences...
+        </p>
+    </section>
 
-    <main>
-        <section id="sobre-mi">
-            <h2>Sobre mí</h2>
-            <p>Soy un profesional especializado en [Tu área]. Me encanta crear soluciones innovadoras y aprender nuevas tecnologías.</p>
-        </section>
-
-        <section id="proyectos">
-            <h2>Proyectos</h2>
-            <div class="project-grid">
-                <div class="project-card">
-                    <h3>Proyecto 1</h3>
-                    <p>Descripción breve del proyecto.</p>
-                    <a href="#" class="btn">Ver más</a>
-                </div>
-                <div class="project-card">
-                    <h3>Proyecto 2</h3>
-                    <p>Descripción breve del proyecto.</p>
-                    <a href="#" class="btn">Ver más</a>
-                </div>
-                <!-- Puedes agregar más tarjetas de proyectos -->
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <h2 data-lang="services-title">My Services</h2>
+        <div class="service-cards">
+            <div class="card">
+                <h3 data-lang="service1-title">Creative graphic design</h3>
+                <p data-lang="service1-description">Visual identity design, UI/UX interface, illustrations...</p>
             </div>
-        </section>
+            <div class="card">
+                <h3 data-lang="service2-title">Interactive frontend development</h3>
+                <p data-lang="service2-description">HTML, CSS, JavaScript, CMS integration...</p>
+            </div>
+            <div class="card">
+                <h3 data-lang="service3-title">User experience (UX) design</h3>
+                <p data-lang="service3-description">Wireframing, prototyping, user testing...</p>
+            </div>
+            <div class="card">
+                <h3 data-lang="service4-title">Maintenance and support</h3>
+                <p data-lang="service4-description">Website monitoring, bug fixing, 24/7 support...</p>
+            </div>
+        </div>
+    </section>
 
-        <section id="contacto">
-            <h2>Contacto</h2>
-            <p>¿Te interesa trabajar conmigo? ¡Envíame un mensaje!</p>
-            <form action="https://formspree.io/f/tuemail" method="POST">
-                <label for="name">Nombre:</label>
-                <input type="text" id="name" name="name" required>
+    <!-- Work Section -->
+    <section id="work" class="work">
+        <h2 data-lang="work-title">My Work</h2>
+        <div class="work-gallery">
+            <div class="work-item" data-lang="project1">Project 1</div>
+            <div class="work-item" data-lang="project2">Project 2</div>
+            <div class="work-item" data-lang="project3">Project 3</div>
+            <div class="work-item" data-lang="project4">Project 4</div>
+        </div>
+    </section>
 
-                <label for="email">Correo Electrónico:</label>
-                <input type="email" id="email" name="email" required>
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2 data-lang="contact-title">Contact Me</h2>
+        <p>Email: omaralaouidahbi@example.com</p>
+        <p>Phone: +212 651-405-939</p>
+    </section>
 
-                <label for="message">Mensaje:</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
-
-                <button type="submit">Enviar</button>
-            </form>
-        </section>
-    </main>
-
-    <footer>
-        <p>© 2024 [Tu Nombre]. Todos los derechos reservados.</p>
+    <footer class="footer">
+        <p>&copy; 2023 Omar ALAQUI DAHBI. All rights reserved.</p>
     </footer>
+
+    <script src="scripts.js"></script>
 </body>
 </html>
