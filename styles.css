@@ -17,16 +17,62 @@ body {
 .hero {
     background-color: #4c2c83; /* Morado oscuro */
     padding: 50px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Hace que ocupe toda la altura de la pantalla */
+}
+
+.hero-content {
     text-align: center;
+    color: #fff;
+}
+
+.hero-text h2 {
+    font-size: 2.5rem;
+}
+
+.hero-text h3 {
+    font-size: 3rem;
+    margin-top: 10px;
+}
+
+.hero-text p {
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+.cta-buttons {
+    margin-top: 30px;
+}
+
+.cta-buttons .btn {
+    background-color: #fff;
+    color: #4c2c83; /* Contraste con el fondo oscuro */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    text-decoration: none;
+}
+
+.cta-buttons .btn.primary {
+    background-color: #fff;
+    color: #4c2c83;
+}
+
+.cta-buttons .btn.secondary {
+    background-color: #352354;
+    color: #fff;
 }
 
 /* Alternating Colors (con los cambios solicitados) */
 .about {
-    background-color: #4c2c83; /* Morado oscuro (cambiado) */
+    background-color: #4c2c83; /* Morado oscuro */
 }
 
 .services {
-    background-color: #352354; /* Morado claro (cambiado) */
+    background-color: #352354; /* Morado claro */
 }
 
 .skills {
