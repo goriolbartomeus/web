@@ -5,92 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Header Section -->
     <header class="header">
-        <nav class="navbar">
-            <h1>Omar <span class="highlight">ALAQUI DAHBI</span></h1>
+        <div class="navbar">
+            <h1>Portfolio</h1>
             <ul class="nav-links">
-                <li><a href="#about" data-lang="about">About</a></li>
-                <li><a href="#services" data-lang="services">Services</a></li>
-                <li><a href="#skills" data-lang="skills">My Skills</a></li>
-                <li><a href="#work" data-lang="work">My Work</a></li>
-                <li><a href="#contact" data-lang="contact">Contact Me</a></li>
+                <li><a href="#about">About Me</a></li>
+                <li><a href="#services">My Services</a></li>
+                <li><a href="#work">My Work</a></li>
+                <li><a href="#contact">Contact Me</a></li>
             </ul>
-            <button id="language-toggle" class="language-btn">ES</button>
-        </nav>
-        <div class="hero">
-            <div class="hero-text">
-                <p data-lang="intro-hello">Hello, My name is</p>
-                <h2>Omar <span class="highlight">ALAQUI DAHBI</span></h2>
-                <h3 data-lang="intro-description">I'm a Graphic designer & Frontend developer.</h3>
-                <div class="cta-buttons">
-                    <a href="#" class="btn primary" data-lang="download-cv">Download CV</a>
-                    <a href="#" class="btn secondary" data-lang="lets-talk">Let's Talk</a>
-                </div>
-            </div>
-            <div class="hero-image">
-                <!-- Imagen del avatar (puedes reemplazarlo) -->
-                <img src="avatar.png" alt="Avatar">
-            </div>
+            <button class="language-btn">ES/EN</button>
         </div>
     </header>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <h2 data-lang="about-title">About Me</h2>
-        <p data-lang="about-description">
-            Passionate about graphic design and frontend development, I combine creativity and technical skills to create impactful visual experiences...
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-text">
+            <h2>Hello, My name is</h2>
+            <h3>Omar Alaoui Dahbi</h3>
+            <p>I'm a Graphic Designer & Frontend Developer.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn primary">Download CV</a>
+                <a href="#" class="btn secondary">Let's talk</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <!-- Aquí va la imagen de bienvenida -->
+        </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section class="about" id="about">
+        <h2>About Me</h2>
+        <p>
+            Passionate about graphic design and frontend development, 
+            I combine creativity and technical skills to create impactful 
+            visual experiences.
         </p>
     </section>
 
-    <!-- Services Section -->
-    <section id="services" class="services">
-        <h2 data-lang="services-title">My Services</h2>
+    <!-- My Services Section -->
+    <section class="services" id="services">
+        <h2>My Services</h2>
         <div class="service-cards">
             <div class="card">
-                <h3 data-lang="service1-title">Creative graphic design</h3>
-                <p data-lang="service1-description">Visual identity design, UI/UX interface, illustrations...</p>
+                <h3>Creative Graphic Design</h3>
+                <p>Visual identity, custom illustrations, and print materials.</p>
             </div>
             <div class="card">
-                <h3 data-lang="service2-title">Interactive frontend development</h3>
-                <p data-lang="service2-description">HTML, CSS, JavaScript, CMS integration...</p>
+                <h3>Frontend Development</h3>
+                <p>HTML, CSS, and JavaScript development for responsive websites.</p>
             </div>
             <div class="card">
-                <h3 data-lang="service3-title">User experience (UX) design</h3>
-                <p data-lang="service3-description">Wireframing, prototyping, user testing...</p>
+                <h3>User Experience Design</h3>
+                <p>Wireframing and prototyping to improve user experiences.</p>
             </div>
             <div class="card">
-                <h3 data-lang="service4-title">Maintenance and support</h3>
-                <p data-lang="service4-description">Website monitoring, bug fixing, 24/7 support...</p>
+                <h3>Maintenance & Support</h3>
+                <p>Technical issue resolution and website updates.</p>
             </div>
         </div>
     </section>
 
-    <!-- Work Section -->
-    <section id="work" class="work">
-        <h2 data-lang="work-title">My Work</h2>
+    <!-- Skills (Second About Me) Section -->
+    <section class="skills">
+        <h2>About Me</h2>
+        <p>
+            With a strong background in graphic design and web development, 
+            I create aesthetic, intuitive, and responsive user interfaces.
+        </p>
+    </section>
+
+    <!-- My Work Section -->
+    <section class="work" id="work">
+        <h2>My Work</h2>
         <div class="work-gallery">
-            <div class="work-item" data-lang="project1">Project 1</div>
-            <div class="work-item" data-lang="project2">Project 2</div>
-            <div class="work-item" data-lang="project3">Project 3</div>
-            <div class="work-item" data-lang="project4">Project 4</div>
+            <div class="work-item">Project 1</div>
+            <div class="work-item">Project 2</div>
+            <div class="work-item">Project 3</div>
+            <div class="work-item">Project 4</div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <h2 data-lang="contact-title">Contact Me</h2>
-        <p>Email: omaralaouidahbi@example.com</p>
-        <p>Phone: +212 651-405-939</p>
+    <!-- Contact Me Section -->
+    <section class="contact" id="contact">
+        <h2>Contact Me</h2>
+        <p>Email: example@mail.com</p>
+        <p>Phone: +1 234 567 890</p>
+        <p>Location: Morocco</p>
     </section>
 
+    <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2023 Omar ALAQUI DAHBI. All rights reserved.</p>
+        <p>© 2023 Omar Alaoui Dahbi. All rights reserved.</p>
     </footer>
-
-    <script src="scripts.js"></script>
 </body>
 </html>
