@@ -20,13 +20,13 @@ body {
     text-align: center;
 }
 
-/* Alternating Colors */
+/* Alternating Colors (con los cambios solicitados) */
 .about {
-    background-color: #352354; /* Morado claro */
+    background-color: #4c2c83; /* Morado oscuro (cambiado) */
 }
 
 .services {
-    background-color: #4c2c83; /* Morado oscuro */
+    background-color: #352354; /* Morado claro (cambiado) */
 }
 
 .skills {
