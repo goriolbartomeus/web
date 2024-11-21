@@ -8,7 +8,7 @@ body {
 
 /* Header Section */
 .header {
-    background-color: #4c2c83; /* Morado oscuro para la cabecera */
+    background-color: #4c2c83; /* Morado oscuro */
     color: #fff;
     padding: 20px 0;
 }
@@ -200,7 +200,7 @@ section p {
 
 /* Footer Section */
 .footer {
-    background-color: #2a1b3e; /* Pie de página con morado casi negro */
+    background-color: #2a1b3e; /* Pie de página con morado más oscuro */
     text-align: center;
     padding: 20px;
     color: #fff;
