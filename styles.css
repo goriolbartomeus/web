@@ -8,105 +8,37 @@ body {
 
 /* Header Section */
 .header {
-    background-color: #4c2c83; /* Morado oscuro para la cabecera */
+    background-color: #4c2c83; /* Morado oscuro */
     color: #fff;
     padding: 20px 0;
 }
 
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 20px;
-}
-
-.nav-links a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
-}
-
-.nav-links a:hover {
-    color: #f5a623;
-}
-
-.language-btn {
-    background-color: transparent;
-    border: 1px solid #fff;
-    color: #fff;
-    padding: 5px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-}
-
-.language-btn:hover {
-    background-color: #f5a623;
-    color: #4c2c83;
-}
-
 /* Hero Section */
 .hero {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 40px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+    background-color: #4c2c83; /* Morado oscuro */
+    padding: 50px 20px;
+    text-align: center;
 }
 
-.hero-text {
-    max-width: 50%;
+/* Alternating Colors */
+.about {
+    background-color: #352354; /* Morado claro */
 }
 
-.hero-text h2 {
-    font-size: 3rem;
-    margin: 10px 0;
+.services {
+    background-color: #4c2c83; /* Morado oscuro */
 }
 
-.hero-text h3 {
-    font-size: 1.5rem;
-    font-weight: 400;
-    margin-bottom: 20px;
+.skills {
+    background-color: #352354; /* Morado claro */
 }
 
-.cta-buttons .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    margin-right: 10px;
+.work {
+    background-color: #4c2c83; /* Morado oscuro */
 }
 
-.primary {
-    background-color: #f5a623;
-    color: #4c2c83;
-}
-
-.primary:hover {
-    background-color: #ffcd74;
-}
-
-.secondary {
-    background-color: transparent;
-    color: #fff;
-    border: 1px solid #fff;
-}
-
-.secondary:hover {
-    background-color: #fff;
-    color: #4c2c83;
+.contact {
+    background-color: #352354; /* Morado claro */
 }
 
 /* Section Styling */
@@ -118,7 +50,6 @@ section {
 section h2 {
     margin-bottom: 20px;
     font-size: 2.5rem;
-    font-weight: 600;
 }
 
 section p {
@@ -128,79 +59,9 @@ section p {
     margin: 0 auto;
 }
 
-/* Alternating Colors */
-.about {
-    background-color: #4c2c83; /* Morado oscuro */
-}
-
-.services {
-    background-color: #352354; /* Morado más claro */
-}
-
-.skills {
-    background-color: #4c2c83; /* Morado oscuro */
-}
-
-.work {
-    background-color: #352354; /* Morado más claro */
-}
-
-.contact {
-    background-color: #4c2c83; /* Morado oscuro */
-}
-
-/* Services Cards */
-.service-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.card {
-    background-color: #2a1b3e; /* Fondo de las tarjetas */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-}
-
-.card h3 {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
-}
-
-.card p {
-    font-size: 1rem;
-    color: #ddd;
-}
-
-/* Work Section */
-.work-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-}
-
-.work-item {
-    background-color: #2a1b3e; /* Fondo para cada ítem */
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    transition: transform 0.3s ease;
-}
-
-.work-item:hover {
-    transform: scale(1.05);
-}
-
 /* Footer Section */
 .footer {
-    background-color: #2a1b3e; /* Pie de página con morado casi negro */
+    background-color: #2a1b3e;
     text-align: center;
     padding: 20px;
     color: #fff;
