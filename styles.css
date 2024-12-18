@@ -1,115 +1,132 @@
-/* General styles */
+/* Estilos generales */
 body {
+    font-family: Arial, sans-serif;
     margin: 0;
-    font-family: 'Poppins', sans-serif;
+    padding: 0;
     line-height: 1.6;
-    color: #fff;
+    color: #333;
+    background-color: #f8f8f5; /* Color crema */
 }
 
-/* Header Section */
-.header {
-    background-color: #4c2c83; /* Morado oscuro */
-    color: #fff;
-    padding: 20px 0;
+h1, h2, h3 {
+    color: #2e8b57; /* Verde claro */
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 /* Hero Section */
 .hero {
-    background-color: #4c2c83; /* Morado oscuro */
-    padding: 50px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Hace que ocupe toda la altura de la pantalla */
-}
-
-.hero-content {
+    background-color: #2e8b57; /* Verde claro */
+    color: white;
     text-align: center;
-    color: #fff;
+    padding: 50px 20px;
 }
 
-.hero-text h2 {
+.hero h1 {
     font-size: 2.5rem;
 }
 
-.hero-text h3 {
-    font-size: 3rem;
-    margin-top: 10px;
-}
-
-.hero-text p {
+.hero p {
     font-size: 1.2rem;
+    margin: 10px 0;
+}
+
+.hero .btn {
+    display: inline-block;
     margin-top: 20px;
-}
-
-.cta-buttons {
-    margin-top: 30px;
-}
-
-.cta-buttons .btn {
-    background-color: #fff;
-    color: #4c2c83; /* Contraste con el fondo oscuro */
     padding: 10px 20px;
+    color: #2e8b57;
+    background-color: white;
     border: none;
     border-radius: 5px;
-    margin: 5px;
     text-decoration: none;
+    font-weight: bold;
 }
 
-.cta-buttons .btn.primary {
-    background-color: #fff;
-    color: #4c2c83;
+.hero .btn:hover {
+    background-color: #f8f8f5;
+    color: #2e8b57;
 }
 
-.cta-buttons .btn.secondary {
-    background-color: #352354;
-    color: #fff;
-}
-
-/* Alternating Colors (con los cambios solicitados) */
-.about {
-    background-color: #4c2c83; /* Morado oscuro */
-}
-
-.services {
-    background-color: #352354; /* Morado claro */
-}
-
-.skills {
-    background-color: #352354; /* Morado claro */
-}
-
-.work {
-    background-color: #4c2c83; /* Morado oscuro */
-}
-
-.contact {
-    background-color: #352354; /* Morado claro */
-}
-
-/* Section Styling */
-section {
+/* Secciones */
+.section {
     padding: 50px 20px;
+}
+
+.bg-light {
+    background-color: #ffffff; /* Blanco */
+}
+
+.section h2 {
     text-align: center;
-}
-
-section h2 {
     margin-bottom: 20px;
-    font-size: 2.5rem;
 }
 
-section p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    max-width: 800px;
-    margin: 0 auto;
+/* Lista de habilidades */
+.skills-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
-/* Footer Section */
+.skills-list li {
+    background: #2e8b57;
+    color: white;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Proyectos */
+.project {
+    background-color: #f8f8f5; /* Color crema */
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.project h3 {
+    margin-top: 0;
+}
+
+/* Formulario de contacto */
+form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f8f5; /* Color crema */
+}
+
+form button {
+    background-color: #2e8b57; /* Verde claro */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #246b43;
+}
+
+/* Footer */
 .footer {
-    background-color: #2a1b3e;
     text-align: center;
     padding: 20px;
-    color: #fff;
-    font-size: 0.9rem;
+    background-color: #2e8b57; /* Verde claro */
+    color: white;
 }
