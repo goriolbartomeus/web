@@ -1,105 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
+    <title>Portafolio - Administrador de Sistemas y Redes</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header Section -->
-    <header class="header">
-        <div class="navbar">
-            <h1>Portfolio</h1>
-            <ul class="nav-links">
-                <li><a href="#about">About Me</a></li>
-                <li><a href="#services">My Services</a></li>
-                <li><a href="#work">My Work</a></li>
-                <li><a href="#contact">Contact Me</a></li>
-            </ul>
-            <button class="language-btn">ES/EN</button>
+    <!-- Header / Inicio -->
+    <header class="hero">
+        <div class="container">
+            <h1>Tu Nombre</h1>
+            <p>Administrador de Sistemas y Redes</p>
+            <a href="#contacto" class="btn">Contáctame</a>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h2>Hello, My name is</h2>
-                <h3>Omar Alaoui Dahbi</h3>
-                <p>I'm a Graphic Designer & Frontend Developer.</p>
-                <div class="cta-buttons">
-                    <a href="#" class="btn primary">Download CV</a>
-                    <a href="#" class="btn secondary">Let's talk</a>
-                </div>
+    <!-- Sobre mí -->
+    <section id="sobre-mi" class="section">
+        <div class="container">
+            <h2>Sobre mí</h2>
+            <p>Soy un administrador de sistemas y redes con [número de años] años de experiencia en diseño, implementación y mantenimiento de infraestructuras IT. Mi objetivo es garantizar soluciones tecnológicas seguras y eficientes para empresas.</p>
+            <p>Cuento con certificaciones como CCNA, ITIL y conocimientos avanzados en virtualización, redes y ciberseguridad.</p>
+        </div>
+    </section>
+
+    <!-- Habilidades -->
+    <section id="habilidades" class="section bg-light">
+        <div class="container">
+            <h2>Habilidades Técnicas</h2>
+            <ul class="skills-list">
+                <li><strong>Gestión de Sistemas:</strong> Windows Server, Linux (Ubuntu, Debian), Active Directory.</li>
+                <li><strong>Redes:</strong> Configuración de switches y routers Cisco, VLANs, VPNs, TCP/IP, OSPF, BGP.</li>
+                <li><strong>Virtualización:</strong> VMware, Hyper-V, Microsoft Azure, AWS.</li>
+                <li><strong>Monitoreo:</strong> Nagios, Zabbix, SolarWinds.</li>
+                <li><strong>Programación:</strong> Scripting en Bash y PowerShell.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Proyectos -->
+    <section id="proyectos" class="section">
+        <div class="container">
+            <h2>Proyectos Destacados</h2>
+            <div class="project">
+                <h3>Migración a la Nube</h3>
+                <p>Implementación de una infraestructura en Microsoft Azure para una empresa mediana, mejorando la disponibilidad y reduciendo costos en un 20%.</p>
+            </div>
+            <div class="project">
+                <h3>Optimización de Redes</h3>
+                <p>Configuración de switches Cisco y creación de VLANs para segmentar el tráfico de red, mejorando la seguridad y eficiencia.</p>
+            </div>
+            <div class="project">
+                <h3>Sistema de Monitoreo</h3>
+                <p>Diseño e implementación de un sistema de monitoreo con Zabbix, permitiendo la detección proactiva de problemas en la red.</p>
             </div>
         </div>
     </section>
 
-    <!-- About Me Section -->
-    <section class="about" id="about">
-        <h2>About Me</h2>
-        <p>
-            Passionate about graphic design and frontend development, 
-            I combine creativity and technical skills to create impactful 
-            visual experiences.
-        </p>
-    </section>
+    <!-- Contacto -->
+    <section id="contacto" class="section bg-light">
+        <div class="container">
+            <h2>Contacto</h2>
+            <p>¿Tienes alguna pregunta o proyecto en mente? ¡Hablemos!</p>
+            <form action="#" method="post">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
 
-    <!-- My Services Section -->
-    <section class="services" id="services">
-        <h2>My Services</h2>
-        <div class="service-cards">
-            <div class="card">
-                <h3>Creative Graphic Design</h3>
-                <p>Visual identity, custom illustrations, and print materials.</p>
-            </div>
-            <div class="card">
-                <h3>Frontend Development</h3>
-                <p>HTML, CSS, and JavaScript development for responsive websites.</p>
-            </div>
-            <div class="card">
-                <h3>User Experience Design</h3>
-                <p>Wireframing and prototyping to improve user experiences.</p>
-            </div>
-            <div class="card">
-                <h3>Maintenance & Support</h3>
-                <p>Technical issue resolution and website updates.</p>
-            </div>
+                <label for="email">Correo Electrónico:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+
+                <button type="submit" class="btn">Enviar</button>
+            </form>
         </div>
-    </section>
-
-    <!-- Skills (Second About Me) Section -->
-    <section class="skills">
-        <h2>About Me</h2>
-        <p>
-            With a strong background in graphic design and web development, 
-            I create aesthetic, intuitive, and responsive user interfaces.
-        </p>
-    </section>
-
-    <!-- My Work Section -->
-    <section class="work" id="work">
-        <h2>My Work</h2>
-        <div class="work-gallery">
-            <div class="work-item">Project 1</div>
-            <div class="work-item">Project 2</div>
-            <div class="work-item">Project 3</div>
-            <div class="work-item">Project 4</div>
-        </div>
-    </section>
-
-    <!-- Contact Me Section -->
-    <section class="contact" id="contact">
-        <h2>Contact Me</h2>
-        <p>Email: example@mail.com</p>
-        <p>Phone: +1 234 567 890</p>
-        <p>Location: Morocco</p>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>© 2023 Omar Alaoui Dahbi. All rights reserved.</p>
+        <div class="container">
+            <p>&copy; 2024 Tu Nombre. Todos los derechos reservados.</p>
+        </div>
     </footer>
 </body>
 </html>
