@@ -1,1 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Has caigut</title>
+</head>
+
+<style>
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #000000;
+        margin: 0;
+        min-height: 100vh;
+        padding: 2rem 1rem;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.6;
+        color: #1c1c1c;
+    }
+
+    .content {
+        width: 100%;
+        max-width: 760px;
+        padding: 2.5rem;
+        border-radius: 30px;
+        background-color: #fff;
+        box-shadow: 10px 5px 15px #0000004d;
+    }
+
+    h1 {
+        margin: 0 0 1.5rem;
+        font-size: clamp(1.6rem, 4vw, 2.2rem);
+        line-height: 1.2;
+        color: #000;
+    }
+
+    h2 {
+        margin: 2rem 0 0.75rem;
+        font-size: 1.2rem;
+        color: #000;
+    }
+
+    .red-box,
+    .green-box {
+        margin: 1rem 0;
+        padding: 1.5rem 1.75rem;
+        border-radius: 30px;
+        color: #1c1c1c;
+    }
+
+    .red-box {
+        background-color: #f34949b7;
+    }
+
+    .green-box {
+        background-color: #5ccc5c;
+        margin-top: 2rem;
+        margin-bottom: 0;
+        font-weight: bold;
+    }
+
+    ul {
+        margin: 0;
+        padding-left: 1.4rem;
+    }
+
+    li {
+        margin-bottom: 0.5rem;
+    }
+
+    li::marker {
+        color: #f34949;
+    }
+
+    @media (max-width: 480px) {
+        .content {
+            padding: 1.5rem;
+            border-radius: 24px;
+        }
+
+        .red-box,
+        .green-box {
+            padding: 1.25rem;
+            border-radius: 24px;
+        }
+    }
+</style>
+
+<body>
+
+    <div class="content">
+        <h1>Has caigut en un phishing.</h1>
+
+        <div class="red-box">
+            Has fet clic en un enllaç fraudulent simulat. En un atac real, els ciberdelinqüents podrien haver robat les
+            teves credencials o instal·lat programari maliciós al teu dispositiu.
+        </div>
+        <h2>Senyals d'alerta que podies haver detectat</h2>
+        <ul>
+            <li>Remitent o adreça web estranya o amb petites faltes d'ortografia.</li>
+            <li>Missatges que generen urgència o amenaces ("el teu compte serà bloquejat").</li>
+            <li>Enllaços que no coincideixen amb el domini oficial de l'empresa.</li>
+            <li>Sol·licituds de contrasenyes, dades bancàries o dades personals.</li>
+            <li>Fitxers adjunts inesperats.</li>
+        </ul>
+
+        <h2>Què has de fer en una situació real</h2>
+        <ul>
+            <li>No introdueixis cap dada ni descarreguis res.</li>
+            <li>Canvia immediatament la teva contrasenya si n'has introduït alguna.</li>
+            <li>Avisa el departament de seguretat informàtica o el responsable TI.</li>
+            <li>Elimina el missatge sospitós i denuncia'l com a correu brossa.</li>
+        </ul>
+
+        <div class="green-box">
+            No s’ha recollit cap dada personal ni cap credencial en aquesta simulació.
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+(async () => {
+  const NAMESPACE = 'phish-sim-a8f3k29x';
+  const KEY       = 'visitas-unicas-q7m2p4';
+  const FLAG      = 'phish_counted';
+
+  try {
+    if (localStorage.getItem(FLAG)) return;
+    const r = await fetch(`https://abacus.jasoncameron.dev/hit/${NAMESPACE}/${KEY}`);
+    if (r.ok) localStorage.setItem(FLAG, '1');
+  } catch (e) {}
+})();
+</script>
+
+<!-- Para ver la gente que cae en el phishing: https://abacus.jasoncameron.dev/get/phish-sim-a8f3k29x/visitas-unicas-q7m2p4 -->
