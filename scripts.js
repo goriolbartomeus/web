@@ -174,6 +174,7 @@ function renderDashboard() {
 function renderLibrary() {
   const list = $("#library-list");
   if (!list) return;
+  $(".demo-notice")?.remove();
   if (!modules.length) {
     list.innerHTML = '<div class="empty-search">Todavía no hay módulos en tu biblioteca.</div>';
     return;
