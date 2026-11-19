@@ -1,75 +1,30 @@
-const translations = {
-    en: {
-        about: "About",
-        services: "Services",
-        skills: "My Skills",
-        work: "My Work",
-        contact: "Contact Me",
-        "intro-hello": "Hello, My name is",
-        "intro-description": "I'm a Graphic designer & Frontend developer.",
-        "download-cv": "Download CV",
-        "lets-talk": "Let's Talk",
-        "about-title": "About Me",
-        "about-description": "Passionate about graphic design and frontend development, I combine creativity and technical skills to create impactful visual experiences...",
-        "services-title": "My Services",
-        "service1-title": "Creative graphic design",
-        "service1-description": "Visual identity design, UI/UX interface, illustrations...",
-        "service2-title": "Interactive frontend development",
-        "service2-description": "HTML, CSS, JavaScript, CMS integration...",
-        "service3-title": "User experience (UX) design",
-        "service3-description": "Wireframing, prototyping, user testing...",
-        "service4-title": "Maintenance and support",
-        "service4-description": "Website monitoring, bug fixing, 24/7 support...",
-        "work-title": "My Work",
-        project1: "Project 1",
-        project2: "Project 2",
-        project3: "Project 3",
-        project4: "Project 4",
-        "contact-title": "Contact Me",
-    },
-    es: {
-        about: "Acerca de",
-        services: "Servicios",
-        skills: "Mis Habilidades",
-        work: "Mi Trabajo",
-        contact: "Contáctame",
-        "intro-hello": "Hola, mi nombre es",
-        "intro-description": "Soy diseñador gráfico y desarrollador Frontend.",
-        "download-cv": "Descargar CV",
-        "lets-talk": "Hablemos",
-        "about-title": "Sobre mí",
-        "about-description": "Apasionado por el diseño gráfico y el desarrollo frontend, combino creatividad y habilidades técnicas para crear experiencias visuales impactantes...",
-        "services-title": "Mis Servicios",
-        "service1-title": "Diseño gráfico creativo",
-        "service1-description": "Diseño de identidad visual, interfaces UI/UX, ilustraciones...",
-        "service2-title": "Desarrollo Frontend interactivo",
-        "service2-description": "HTML, CSS, JavaScript, integración CMS...",
-        "service3-title": "Diseño de experiencia de usuario (UX)",
-        "service3-description": "Wireframing, prototipos, pruebas de usuario...",
-        "service4-title": "Mantenimiento y soporte",
-        "service4-description": "Monitoreo web, corrección de errores, soporte 24/7...",
-        "work-title": "Mi Trabajo",
-        project1: "Proyecto 1",
-        project2: "Proyecto 2",
-        project3: "Proyecto 3",
-        project4: "Proyecto 4",
-        "contact-title": "Contáctame",
-    },
+const modules={
+ M01:{title:"Sistemas informáticos",description:"Administración, sistemas operativos y virtualización.",progress:"68%",docs:3,ras:[["RA1","Instalación y configuración de sistemas","2 documentos"],["RA2","Gestión de la información","1 documento"],["RA3","Administración de sistemas operativos","Sin documentos"],["RA4","Administración de dominios","Sin documentos"]]},
+ M02:{title:"Bases de datos",description:"Modelado, consultas y gestión de datos.",progress:"42%",docs:4,ras:[["RA1","Introducción a las bases de datos","2 documentos"],["RA2","Modelo relacional y SQL","2 documentos"],["RA3","Diseño de bases de datos","Sin documentos"],["RA4","Gestión de bases de datos","Sin documentos"],["RA5","Programación de bases de datos","Sin documentos"]]},
+ M03:{title:"Programación",description:"Lógica, desarrollo y lenguajes de programación.",progress:"25%",docs:3,ras:[["RA1","Fundamentos de programación","2 documentos"],["RA2","Estructuras de control","1 documento"],["RA3","Programación modular","Sin documentos"],["RA4","Programación orientada a objetos","Sin documentos"],["RA5","Gestión de ficheros","Sin documentos"]]},
+ M04:{title:"Redes",description:"Infraestructura, configuración y servicios de red.",progress:"15%",docs:2,ras:[["RA1","Configuración de redes locales","2 documentos"],["RA2","Interconexión de redes","Sin documentos"],["RA3","Servicios de red","Sin documentos"],["RA4","Seguridad en redes","Sin documentos"]]}
 };
-
-const languageToggle = document.getElementById("language-toggle");
-let currentLanguage = "en";
-
-languageToggle.addEventListener("click", () => {
-    currentLanguage = currentLanguage === "en" ? "es" : "en";
-    languageToggle.textContent = currentLanguage === "en" ? "ES" : "EN";
-    translatePage(currentLanguage);
-});
-
-function translatePage(language) {
-    const elements = document.querySelectorAll("[data-lang]");
-    elements.forEach((element) => {
-        const key = element.getAttribute("data-lang");
-        element.textContent = translations[language][key];
-    });
-}
+const pageNames={dashboard:"Dashboard",biblioteca:"Biblioteca",modulo:"Módulo",asistente:"Asistente IA",configuracion:"Configuración"};
+let toastTimer;
+function toast(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2600)}
+function navigate(page){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active-page",p.dataset.view===page));document.querySelectorAll(".nav-link[data-page]").forEach(a=>a.classList.toggle("active",a.dataset.page===page));document.getElementById("breadcrumb-current").textContent=pageNames[page]||"Módulo";document.getElementById("sidebar").classList.remove("open");window.scrollTo({top:0,behavior:"smooth"})}
+document.querySelectorAll("[data-page]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();navigate(a.dataset.page)}));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.go)));
+function openModule(code){const m=modules[code];if(!m)return;document.getElementById("detail-code").textContent=code+" · MÓDULO";document.getElementById("detail-title").innerHTML=m.title+'<span class="heading-period">.</span>';document.getElementById("detail-description").textContent=m.description;document.getElementById("detail-ra-count").textContent=m.ras.length;document.getElementById("detail-doc-count").textContent=m.docs;document.getElementById("detail-progress").textContent=m.progress;document.getElementById("detail-ra-list").innerHTML=m.ras.map(r=>'<article class="detail-ra-card"><span class="ra-code">'+r[0]+'</span><div><strong>'+r[1]+'</strong><p>'+r[2]+' · Material de estudio</p></div><button data-detail-ra="'+r[0]+'" data-detail-module="'+code+'">Ver apartado →</button></article>').join("");navigate("modulo")}
+document.querySelectorAll("[data-open-module]").forEach(c=>c.addEventListener("click",()=>openModule(c.dataset.openModule)));
+document.querySelectorAll(".module-link").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();openModule(a.dataset.module)}));
+document.getElementById("detail-ra-list").addEventListener("click",e=>{const b=e.target.closest("[data-detail-ra]");if(b)openRa(b.dataset.detailModule,b.dataset.detailRa)});
+document.querySelectorAll(".library-module-head").forEach(b=>b.addEventListener("click",()=>{const list=b.nextElementSibling;const expanded=b.getAttribute("aria-expanded")==="true";b.setAttribute("aria-expanded",String(!expanded));list.classList.toggle("hidden",expanded)}));
+function openRa(module,ra){toast(module+" · "+ra+": la gestión de documentos estará disponible en la siguiente fase.");}
+document.querySelectorAll(".ra-open").forEach(b=>b.addEventListener("click",()=>openRa(b.dataset.module,b.dataset.ra)));
+document.getElementById("library-search").addEventListener("input",e=>{const q=e.target.value.toLocaleLowerCase("es");let visible=0;document.querySelectorAll(".library-module").forEach(card=>{const match=card.textContent.toLocaleLowerCase("es").includes(q);card.style.display=match?"":"none";if(match)visible++});let empty=document.querySelector(".empty-search");if(!visible&&!empty){empty=document.createElement("div");empty.className="empty-search";empty.textContent="No se han encontrado resultados.";document.getElementById("library-list").append(empty)}else if(visible&&empty)empty.remove()});
+document.getElementById("filter-all").addEventListener("click",()=>toast("Mostrando todos tus módulos."));
+document.getElementById("upload-demo").addEventListener("click",()=>toast("La subida de documentos se activará al conectar el backend en la fase 2."));
+document.getElementById("add-module").addEventListener("click",()=>toast("La creación de módulos estará disponible en la siguiente fase."));
+document.getElementById("mobile-menu").addEventListener("click",()=>document.getElementById("sidebar").classList.toggle("open"));
+document.querySelectorAll('input[name="scope"]').forEach(r=>r.addEventListener("change",()=>{document.getElementById("scope-module").disabled=r.value!=="module";if(r.value==="ra")toast("Podrás seleccionar un RA cuando conectemos la biblioteca.")}));
+document.querySelectorAll(".suggestion").forEach(b=>b.addEventListener("click",()=>{document.getElementById("chat-input").value=b.dataset.prompt;document.getElementById("chat-input").focus()}));
+document.getElementById("chat-form").addEventListener("submit",e=>{e.preventDefault();const input=document.getElementById("chat-input");const value=input.value.trim();if(!value)return;const content=document.getElementById("chat-content");const msg=document.createElement("div");msg.className="chat-message user";msg.textContent=value;content.append(msg);const reply=document.createElement("div");reply.className="chat-message assistant";reply.textContent="El chat es una vista previa. En la fase 2 conectaremos el asistente con el backend y tus documentos para responder con información contrastada.";content.append(reply);input.value="";content.scrollTop=content.scrollHeight});
+document.querySelectorAll(".recent-item").forEach(b=>b.addEventListener("click",()=>toast("El visor de documentos se habilitará cuando añadamos los archivos.")));
+const now=new Date();document.getElementById("today-label").textContent=new Intl.DateTimeFormat("es-ES",{weekday:"short",day:"numeric",month:"short"}).format(now);
+document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();navigate("biblioteca");document.getElementById("library-search").focus()}if(e.key==="Escape")document.getElementById("sidebar").classList.remove("open")});
