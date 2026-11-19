@@ -292,6 +292,7 @@ function ensureModal() {
   const style = document.createElement("style");
   style.textContent = `
     .goriol-modal-backdrop{position:fixed;inset:0;background:#05060bc9;z-index:50;display:grid;place-items:center;padding:18px}
+    .goriol-modal-backdrop[hidden]{display:none}
     .goriol-modal{width:min(620px,100%);max-height:90vh;overflow:auto;background:#151824;border:1px solid #34394b;border-radius:15px;padding:22px;box-shadow:0 25px 90px #0009}
     .goriol-modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:12px}
     .goriol-modal-head h2{font:650 18px Manrope;margin:0;color:#f1f0fa}
