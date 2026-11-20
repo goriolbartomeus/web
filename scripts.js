@@ -96,6 +96,27 @@ function moduleDocumentCount(moduleId) {
   return documents.filter(doc => raIds.includes(doc.learning_outcome_id)).length;
 }
 
+function getRaStatus(ra) {
+  return ["pending", "in_progress", "completed"].includes(ra?.status)
+    ? ra.status
+    : "pending";
+}
+
+function raStatusLabel(status) {
+  return ({
+    pending: "Pendiente",
+    in_progress: "En curso",
+    completed: "Completado"
+  })[status] || "Pendiente";
+}
+
+function moduleProgress(moduleId) {
+  const ras = getModuleRas(moduleId);
+  if (!ras.length) return 0;
+  const completed = ras.filter(ra => getRaStatus(ra) === "completed").length;
+  return Math.round((completed / ras.length) * 100);
+}
+
 function renderAll() {
   renderSidebar();
   renderStats();
@@ -130,6 +151,8 @@ function renderDashboard() {
     grid.innerHTML = modules.map((module, index) => {
       const ras = getModuleRas(module.id);
       const docs = moduleDocumentCount(module.id);
+      const progress = moduleProgress(module.id);
+      const progressLabel = ras.length ? `${progress}% completado` : "Sin apartados";
       const colors = ["purple", "blue", "green", "orange"];
       return `
         <article class="module-card" data-open-module-id="${escapeHTML(module.id)}">
@@ -137,8 +160,8 @@ function renderDashboard() {
           <h3>${escapeHTML(module.name)}</h3>
           <p>${escapeHTML(module.description || "Organiza tus materiales y resultados de aprendizaje.")}</p>
           <div class="module-meta"><span>${ras.length} apartados</span><span>${docs} documentos</span></div>
-          <div class="progress-track"><span style="width:0%"></span></div>
-          <div class="progress-caption"><span>Progreso de estudio</span><strong>Por empezar</strong></div>
+          <div class="progress-track"><span style="width:${progress}%"></span></div>
+          <div class="progress-caption"><span>Progreso de estudio</span><strong>${escapeHTML(progressLabel)}</strong></div>
         </article>`;
     }).join("") || '<div class="empty-search">Crea tu primer módulo para empezar a organizar tus apuntes.</div>';
   }
@@ -188,7 +211,7 @@ function renderLibrary() {
         <button class="library-module-head" aria-expanded="true">
           <span class="module-symbol ${color}">▦</span>
           <span class="library-module-title"><strong>${escapeHTML(module.code)} · ${escapeHTML(module.name)}</strong><small>${ras.length} apartados · ${docs} documentos</small></span>
-          <span class="module-progress-mini">—</span><span class="chevron">⌄</span>
+          <span class="module-progress-mini">${moduleProgress(module.id)}%</span><span class="chevron">⌄</span>
         </button>
         <div class="library-module-actions">
           <button type="button" class="goriol-small-button" data-edit-module="${escapeHTML(module.id)}">Editar módulo</button>
@@ -200,6 +223,7 @@ function renderLibrary() {
             return `<div class="ra-row">
               <span class="ra-code">${escapeHTML(ra.code)}</span>
               <span class="ra-title">${escapeHTML(ra.title)}</span>
+              <span class="ra-status-badge ${getRaStatus(ra)}">${raStatusLabel(getRaStatus(ra))}</span>
               <span class="doc-count" title="${escapeHTML(raDocs.map(doc => doc.original_filename || doc.name).join(", "))}">${raDocs.length} docs</span>
               <button type="button" class="goriol-small-button" data-edit-ra="${escapeHTML(ra.id)}">Editar</button>
               <button type="button" class="goriol-small-button danger" data-delete-ra="${escapeHTML(ra.id)}">Eliminar</button>
@@ -254,7 +278,7 @@ function openModule(moduleId) {
   $("#detail-description").textContent = module.description || "Organiza tus materiales por resultados de aprendizaje.";
   $("#detail-ra-count").textContent = String(ras.length);
   $("#detail-doc-count").textContent = String(moduleDocumentCount(module.id));
-  $("#detail-progress").textContent = "—";
+  $("#detail-progress").textContent = `${moduleProgress(module.id)}%`;
   $("#detail-ra-list").innerHTML = `
     <div class="detail-ra-toolbar">
       <button type="button" class="button button-primary" data-create-ra="${escapeHTML(module.id)}">＋ Añadir resultado de aprendizaje</button>
@@ -262,7 +286,7 @@ function openModule(moduleId) {
     ${ras.length ? ras.map(ra => `
       <article class="detail-ra-card">
         <span class="ra-code">${escapeHTML(ra.code)}</span>
-        <div><strong>${escapeHTML(ra.title)}</strong><p>${escapeHTML(ra.description || "Sin descripción")} · ${getRaDocuments(ra.id).length} documentos</p></div>
+        <div><strong>${escapeHTML(ra.title)}</strong><p>${escapeHTML(ra.description || "Sin descripción")} · ${getRaDocuments(ra.id).length} documentos</p><span class="ra-status-badge ${getRaStatus(ra)}">${raStatusLabel(getRaStatus(ra))}</span></div>
         <div class="ra-management-actions">
           <button type="button" class="goriol-small-button" data-edit-ra="${escapeHTML(ra.id)}">Editar</button>
           <button type="button" class="goriol-small-button danger" data-delete-ra="${escapeHTML(ra.id)}">Eliminar</button>
@@ -281,6 +305,15 @@ function openRa(raId) {
   showModal(`${ra.code} · ${ra.title}`, `
     <p class="goriol-modal-subtitle">${escapeHTML(module ? module.code + " · " + module.name : "")}</p>
     <p class="goriol-ra-description">${escapeHTML(ra.description || "Este resultado de aprendizaje no tiene descripción.")}</p>
+    <form id="ra-status-form" class="goriol-status-form">
+      <label for="ra-status-select">Estado de estudio</label>
+      <select id="ra-status-select" name="status">
+        <option value="pending" ${getRaStatus(ra) === "pending" ? "selected" : ""}>Pendiente</option>
+        <option value="in_progress" ${getRaStatus(ra) === "in_progress" ? "selected" : ""}>En curso</option>
+        <option value="completed" ${getRaStatus(ra) === "completed" ? "selected" : ""}>Completado</option>
+      </select>
+      <button class="button button-primary" type="submit">Guardar estado</button>
+    </form>
     <div class="goriol-doc-list">
       ${docs.length ? docs.map(doc => documentRow(doc)).join("") : '<div class="empty-search">Todavía no hay documentos en este apartado.</div>'}
     </div>
@@ -315,6 +348,14 @@ function ensureModal() {
     .goriol-modal-head h2{font:650 18px Manrope;margin:0;color:#f1f0fa}
     .goriol-modal-close{border:0;background:#25293a;color:#c9cce0;border-radius:7px;width:30px;height:30px;font-size:18px}
     .goriol-modal-subtitle,.goriol-ra-description{font-size:10px;color:#969db2;margin:0 0 10px}
+    .goriol-status-form{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px;background:#1b1f2d;border:1px solid #2b3041;border-radius:8px;margin:14px 0}
+    .goriol-status-form label{font-size:10px;color:#c7cada}
+    .goriol-status-form select{background:#25293a;border:1px solid #444b60;border-radius:6px;color:#f0eff8;padding:8px;font-size:10px;flex:1;min-width:130px}
+    .goriol-status-form button{padding:8px 11px}
+    .ra-status-badge{display:inline-flex;align-items:center;border-radius:5px;padding:4px 7px;font-size:8px;white-space:nowrap;background:#343044;color:#c7bcff}
+    .ra-status-badge.in_progress{background:#26354a;color:#9bc5ff}
+    .ra-status-badge.completed{background:#203b32;color:#8de0b2}
+    .ra-status-badge.pending{background:#343044;color:#c7bcff}
     .goriol-doc-list{display:grid;gap:7px;margin:17px 0}
     .goriol-doc-row{display:flex;align-items:center;gap:9px;padding:10px;background:#1b1f2d;border:1px solid #2b3041;border-radius:8px}
     .goriol-doc-name{display:grid;gap:3px;min-width:0;flex:1}.goriol-doc-name strong{font-size:10px;overflow-wrap:anywhere}.goriol-doc-name small{font-size:8px;color:#858da4}
@@ -362,8 +403,41 @@ function closeModal() {
 function bindModalActions() {
   const form = $("#ra-upload-form");
   if (form) form.addEventListener("submit", uploadForActiveRa);
-  $$("[data-download-doc]").forEach(button => button.addEventListener("click", () => downloadDocument(button.dataset.downloadDoc)));
+  const statusForm = $("#ra-status-form");
+  if (statusForm) statusForm.addEventListener("submit", updateRaStatus);
+  $("[data-download-doc]").forEach(button => button.addEventListener("click", () => downloadDocument(button.dataset.downloadDoc)));
   $$("[data-delete-doc]").forEach(button => button.addEventListener("click", () => deleteDocument(button.dataset.deleteDoc)));
+}
+
+async function updateRaStatus(event) {
+  event.preventDefault();
+  if (!activeLearningOutcome) return;
+
+  const raId = activeLearningOutcome.id;
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+  const status = form.elements.status.value;
+  button.disabled = true;
+  button.textContent = "Guardando…";
+
+  try {
+    const response = await api("/learning-outcomes/" + encodeURIComponent(raId), {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status })
+    });
+    const data = await response.json();
+    const updatedRa = data.learning_outcome;
+    learningOutcomes = learningOutcomes.map(ra => ra.id === raId ? updatedRa : ra);
+    activeLearningOutcome = updatedRa;
+    renderAll();
+    openRa(raId);
+    toast("Estado actualizado: " + raStatusLabel(status) + ".");
+  } catch (error) {
+    toast("No se ha podido actualizar el estado: " + error.message);
+    button.disabled = false;
+    button.textContent = "Guardar estado";
+  }
 }
 
 async function uploadForActiveRa(event) {
