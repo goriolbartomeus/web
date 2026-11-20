@@ -201,6 +201,8 @@ function renderLibrary() {
               <span class="ra-code">${escapeHTML(ra.code)}</span>
               <span class="ra-title">${escapeHTML(ra.title)}</span>
               <span class="doc-count">${raDocs.length} docs</span>
+              <button type="button" class="goriol-small-button" data-edit-ra="${escapeHTML(ra.id)}">Editar</button>
+              <button type="button" class="goriol-small-button danger" data-delete-ra="${escapeHTML(ra.id)}">Eliminar</button>
               <button class="ra-open" data-open-ra-id="${escapeHTML(ra.id)}">Abrir →</button>
             </div>`;
           }).join("") : '<div class="empty-search">Este módulo todavía no tiene resultados de aprendizaje.</div>'}
@@ -250,12 +252,20 @@ function openModule(moduleId) {
   $("#detail-ra-count").textContent = String(ras.length);
   $("#detail-doc-count").textContent = String(moduleDocumentCount(module.id));
   $("#detail-progress").textContent = "—";
-  $("#detail-ra-list").innerHTML = ras.map(ra => `
-    <article class="detail-ra-card">
-      <span class="ra-code">${escapeHTML(ra.code)}</span>
-      <div><strong>${escapeHTML(ra.title)}</strong><p>${escapeHTML(ra.description || "Sin descripción")} · ${getRaDocuments(ra.id).length} documentos</p></div>
-      <button data-open-ra-id="${escapeHTML(ra.id)}">Ver apartado →</button>
-    </article>`).join("") || '<div class="empty-search">Este módulo todavía no tiene resultados de aprendizaje.</div>';
+  $("#detail-ra-list").innerHTML = `
+    <div class="detail-ra-toolbar">
+      <button type="button" class="button button-primary" data-create-ra="${escapeHTML(module.id)}">＋ Añadir resultado de aprendizaje</button>
+    </div>
+    ${ras.length ? ras.map(ra => `
+      <article class="detail-ra-card">
+        <span class="ra-code">${escapeHTML(ra.code)}</span>
+        <div><strong>${escapeHTML(ra.title)}</strong><p>${escapeHTML(ra.description || "Sin descripción")} · ${getRaDocuments(ra.id).length} documentos</p></div>
+        <div class="ra-management-actions">
+          <button type="button" class="goriol-small-button" data-edit-ra="${escapeHTML(ra.id)}">Editar</button>
+          <button type="button" class="goriol-small-button danger" data-delete-ra="${escapeHTML(ra.id)}">Eliminar</button>
+          <button type="button" class="goriol-small-button" data-open-ra-id="${escapeHTML(ra.id)}">Ver apartado →</button>
+        </div>
+      </article>`).join("") : '<div class="empty-search">Este módulo todavía no tiene resultados de aprendizaje.</div>'}`;
   navigate("modulo");
 }
 
@@ -314,6 +324,11 @@ function ensureModal() {
     .library-module-actions{display:flex;justify-content:flex-end;gap:7px;padding:0 14px 10px;background:#151824}
     .library-module-actions .goriol-small-button{cursor:pointer}
     .goriol-form-field textarea{background:#1b1f2d;border:1px solid #3a4053;border-radius:7px;padding:10px;color:#f0eff8;font:inherit;min-height:76px;resize:vertical}
+    .detail-ra-toolbar{display:flex;justify-content:flex-end;margin:0 0 14px}
+    .ra-management-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-left:auto}
+    .ra-management-actions button{cursor:pointer}
+    .detail-ra-card{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
 
     @media(max-width:520px){.goriol-doc-row{flex-wrap:wrap}.goriol-doc-name{min-width:calc(100% - 55px)}}
   `;
@@ -457,7 +472,7 @@ function showModuleForm(moduleId = null) {
     button.textContent = "Guardando…";
     try {
       await api(editing ? "/modules/" + encodeURIComponent(module.id) : "/modules", {
-        method: editing ? "PUT" : "POST",
+        method: editing ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
@@ -483,6 +498,78 @@ async function refreshModulesAndStructure() {
   learningOutcomes = raData.learning_outcomes || [];
   documents = documentData.documents || [];
   renderAll();
+}
+
+function showRaForm(moduleId, raId = null) {
+  const module = modules.find(item => item.id === moduleId);
+  const ra = raId ? learningOutcomes.find(item => item.id === raId) : null;
+  if (!module || (raId && !ra)) return;
+  const editing = Boolean(ra);
+  showModal(editing ? "Editar resultado de aprendizaje" : "Añadir resultado de aprendizaje", `
+    <form id="ra-management-form">
+      <div class="goriol-form-field">
+        <label for="ra-management-code">Código</label>
+        <input id="ra-management-code" name="code" maxlength="30" required placeholder="Ej. RA1" value="${escapeHTML(ra?.code || "")}">
+      </div>
+      <div class="goriol-form-field">
+        <label for="ra-management-title">Título</label>
+        <input id="ra-management-title" name="title" maxlength="200" required placeholder="Título del resultado" value="${escapeHTML(ra?.title || "")}">
+      </div>
+      <div class="goriol-form-field">
+        <label for="ra-management-description">Descripción</label>
+        <textarea id="ra-management-description" name="description" maxlength="2000" placeholder="Descripción (opcional)">${escapeHTML(ra?.description || "")}</textarea>
+      </div>
+      <div class="goriol-modal-actions">
+        <button type="button" class="goriol-small-button" data-close-module-form>Cancelar</button>
+        <button type="submit" class="button button-primary">${editing ? "Guardar cambios" : "Crear RA"}</button>
+      </div>
+    </form>`);
+  $("#ra-management-form").addEventListener("submit", async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const button = form.querySelector('button[type="submit"]');
+    const payload = {
+      code: form.elements.code.value.trim(),
+      title: form.elements.title.value.trim(),
+      description: form.elements.description.value.trim() || null
+    };
+    if (!payload.code || !payload.title) return toast("El código y el título son obligatorios.");
+    if (!editing) payload.module_id = moduleId;
+    button.disabled = true;
+    button.textContent = "Guardando…";
+    try {
+      await api(editing ? "/learning-outcomes/" + encodeURIComponent(ra.id) : "/learning-outcomes", {
+        method: editing ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      await refreshModulesAndStructure();
+      closeModal();
+      openModule(moduleId);
+      toast(editing ? "Resultado de aprendizaje actualizado." : "Resultado de aprendizaje creado.");
+    } catch (error) {
+      toast("No se ha podido guardar el RA: " + error.message);
+      button.disabled = false;
+      button.textContent = editing ? "Guardar cambios" : "Crear RA";
+    }
+  });
+}
+
+async function removeRa(raId) {
+  const ra = learningOutcomes.find(item => item.id === raId);
+  if (!ra) return;
+  const count = getRaDocuments(raId).length;
+  const warning = count ? ` Tiene ${count} documentos asociados; la API podría impedir el borrado mientras existan.` : "";
+  if (!window.confirm(`¿Seguro que quieres eliminar ${ra.code} · ${ra.title}?${warning} Esta acción no se puede deshacer.`)) return;
+  const moduleId = ra.module_id;
+  try {
+    await api("/learning-outcomes/" + encodeURIComponent(raId), { method: "DELETE" });
+    await refreshModulesAndStructure();
+    if (modules.some(item => item.id === moduleId)) openModule(moduleId);
+    toast("Resultado de aprendizaje eliminado.");
+  } catch (error) {
+    toast("No se ha podido eliminar el RA: " + error.message);
+  }
 }
 
 async function removeModule(moduleId) {
@@ -585,6 +672,17 @@ document.addEventListener("click", event => {
   if (moduleLink) { event.preventDefault(); openModule(moduleLink.dataset.moduleId); return; }
   const raButton = event.target.closest("[data-open-ra-id]");
   if (raButton) { openRa(raButton.dataset.openRaId); return; }
+  const createRaButton = event.target.closest("[data-create-ra]");
+  if (createRaButton) { event.preventDefault(); event.stopPropagation(); showRaForm(createRaButton.dataset.createRa); return; }
+  const editRaButton = event.target.closest("[data-edit-ra]");
+  if (editRaButton) {
+    event.preventDefault(); event.stopPropagation();
+    const ra = learningOutcomes.find(item => item.id === editRaButton.dataset.editRa);
+    if (ra) showRaForm(ra.module_id, ra.id);
+    return;
+  }
+  const deleteRaButton = event.target.closest("[data-delete-ra]");
+  if (deleteRaButton) { event.preventDefault(); event.stopPropagation(); removeRa(deleteRaButton.dataset.deleteRa); return; }
   const editModuleButton = event.target.closest("[data-edit-module]");
   if (editModuleButton) { event.preventDefault(); event.stopPropagation(); showModuleForm(editModuleButton.dataset.editModule); return; }
   const deleteModuleButton = event.target.closest("[data-delete-module]");
