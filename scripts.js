@@ -184,7 +184,7 @@ function renderLibrary() {
     const docs = moduleDocumentCount(module.id);
     const color = ["purple", "blue", "green", "orange"][index % 4];
     return `
-      <article class="library-module">
+      <article class="library-module" data-module-id="${escapeHTML(module.id)}">
         <button class="library-module-head" aria-expanded="true">
           <span class="module-symbol ${color}">▦</span>
           <span class="library-module-title"><strong>${escapeHTML(module.code)} · ${escapeHTML(module.name)}</strong><small>${ras.length} apartados · ${docs} documentos</small></span>
@@ -200,7 +200,7 @@ function renderLibrary() {
             return `<div class="ra-row">
               <span class="ra-code">${escapeHTML(ra.code)}</span>
               <span class="ra-title">${escapeHTML(ra.title)}</span>
-              <span class="doc-count">${raDocs.length} docs</span>
+              <span class="doc-count" title="${escapeHTML(raDocs.map(doc => doc.original_filename || doc.name).join(", "))}">${raDocs.length} docs</span>
               <button type="button" class="goriol-small-button" data-edit-ra="${escapeHTML(ra.id)}">Editar</button>
               <button type="button" class="goriol-small-button danger" data-delete-ra="${escapeHTML(ra.id)}">Eliminar</button>
               <button class="ra-open" data-open-ra-id="${escapeHTML(ra.id)}">Abrir →</button>
@@ -214,28 +214,31 @@ function renderLibrary() {
 
 function bindLibrarySearch() {
   const input = $("#library-search");
-  if (!input || input.dataset.bound) return;
-  input.dataset.bound = "true";
-  input.addEventListener("input", () => {
-    const query = input.value.toLocaleLowerCase("es");
+  const filter = $("#module-filter");
+  if (filter) {
+    const current = filter.value || "all";
+    filter.innerHTML = '<option value="all">Todos los módulos</option>' + modules.map(module => `<option value="${escapeHTML(module.id)}">${escapeHTML(module.code)} · ${escapeHTML(module.name)}</option>`).join("");
+    filter.value = modules.some(module => module.id === current) ? current : "all";
+  }
+  const applyFilters = () => {
+    const query = (input?.value || "").toLocaleLowerCase("es").trim();
+    const selectedModule = filter?.value || "all";
     let visible = 0;
     $$(".library-module").forEach(card => {
-      const match = card.textContent.toLocaleLowerCase("es").includes(query);
-      card.style.display = match ? "" : "none";
-      if (match) visible++;
+      const matches = (!query || card.textContent.toLocaleLowerCase("es").includes(query)) && (selectedModule === "all" || card.dataset.moduleId === selectedModule);
+      card.style.display = matches ? "" : "none";
+      if (matches) visible++;
     });
-    let empty = $(".library-list .empty-search");
-    if (!visible && !empty) {
-      empty = document.createElement("div");
-      empty.className = "empty-search";
-      empty.textContent = "No se han encontrado resultados.";
-      $("#library-list").append(empty);
-    } else if (visible && empty && empty.parentElement === $("#library-list")) {
-      empty.remove();
-    }
-  });
+    let empty = $("#library-no-results");
+    if (!visible && modules.length) {
+      if (!empty) { empty = document.createElement("div"); empty.id = "library-no-results"; empty.className = "empty-search"; $("#library-list").append(empty); }
+      empty.textContent = query ? "No se han encontrado resultados." : "No hay módulos para este filtro.";
+    } else empty?.remove();
+  };
+  if (input && !input.dataset.bound) { input.dataset.bound = "true"; input.addEventListener("input", applyFilters); }
+  if (filter && !filter.dataset.bound) { filter.dataset.bound = "true"; filter.addEventListener("change", applyFilters); }
+  applyFilters();
 }
-
 function updateScopeSelect() {
   const select = $("#scope-module");
   if (!select) return;
@@ -693,7 +696,7 @@ document.addEventListener("click", event => {
   if (accordion) {
     const expanded = accordion.getAttribute("aria-expanded") === "true";
     accordion.setAttribute("aria-expanded", String(!expanded));
-    accordion.nextElementSibling?.classList.toggle("hidden", expanded);
+    accordion.closest(".library-module")?.querySelector(".ra-list")?.classList.toggle("hidden", expanded);
     return;
   }
 });
@@ -701,12 +704,7 @@ document.addEventListener("click", event => {
 $("#upload-demo")?.addEventListener("click", showUploadPicker);
 $("#add-module")?.addEventListener("click", () => showModuleForm());
 
-$("#filter-all")?.addEventListener("click", () => {
-  $$(".library-module").forEach(card => card.style.display = "");
-  const search = $("#library-search");
-  if (search) search.value = "";
-  toast("Mostrando todos tus módulos.");
-});
+// El filtro se gestiona desde bindLibrarySearch().
 $("#mobile-menu")?.addEventListener("click", () => $("#sidebar")?.classList.toggle("open"));
 
 $$('input[name="scope"]').forEach(radio => radio.addEventListener("change", () => {
