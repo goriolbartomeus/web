@@ -465,7 +465,7 @@ function showModuleForm(moduleId = null) {
     const payload = {
       code: form.elements.code.value.trim(),
       name: form.elements.name.value.trim(),
-      description: form.elements.description.value.trim() || null
+      description: form.elements.description.value.trim()
     };
     if (!payload.code || !payload.name) return toast("El código y el nombre son obligatorios.");
     button.disabled = true;
