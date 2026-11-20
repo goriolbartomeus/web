@@ -190,6 +190,10 @@ function renderLibrary() {
           <span class="library-module-title"><strong>${escapeHTML(module.code)} · ${escapeHTML(module.name)}</strong><small>${ras.length} apartados · ${docs} documentos</small></span>
           <span class="module-progress-mini">—</span><span class="chevron">⌄</span>
         </button>
+        <div class="library-module-actions">
+          <button type="button" class="goriol-small-button" data-edit-module="${escapeHTML(module.id)}">Editar módulo</button>
+          <button type="button" class="goriol-small-button danger" data-delete-module="${escapeHTML(module.id)}">Eliminar módulo</button>
+        </div>
         <div class="ra-list">
           ${ras.length ? ras.map(ra => {
             const raDocs = getRaDocuments(ra.id);
@@ -307,6 +311,10 @@ function ensureModal() {
     .goriol-upload-form label{font-size:11px;font-weight:600}.goriol-upload-form input[type=file]{font-size:10px;color:#c6cada}.goriol-upload-form small{font-size:8px;color:#858da4}.goriol-upload-form .button{justify-self:start}
     .goriol-form-field{display:grid;gap:7px;margin:13px 0}.goriol-form-field label{font-size:10px;color:#c7cada}.goriol-form-field input,.goriol-form-field select{background:#1b1f2d;border:1px solid #3a4053;border-radius:7px;padding:10px;color:#f0eff8;font:inherit}
     .goriol-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:15px}
+    .library-module-actions{display:flex;justify-content:flex-end;gap:7px;padding:0 14px 10px;background:#151824}
+    .library-module-actions .goriol-small-button{cursor:pointer}
+    .goriol-form-field textarea{background:#1b1f2d;border:1px solid #3a4053;border-radius:7px;padding:10px;color:#f0eff8;font:inherit;min-height:76px;resize:vertical}
+
     @media(max-width:520px){.goriol-doc-row{flex-wrap:wrap}.goriol-doc-name{min-width:calc(100% - 55px)}}
   `;
   document.head.append(style);
@@ -413,6 +421,89 @@ async function deleteDocument(documentId) {
   }
 }
 
+function showModuleForm(moduleId = null) {
+  const module = moduleId ? modules.find(item => item.id === moduleId) : null;
+  const editing = Boolean(module);
+  showModal(editing ? "Editar módulo" : "Crear módulo", `
+    <form id="module-form">
+      <div class="goriol-form-field">
+        <label for="module-code">Código</label>
+        <input id="module-code" name="code" maxlength="30" required placeholder="Ej. M01" value="${escapeHTML(module?.code || "")}">
+      </div>
+      <div class="goriol-form-field">
+        <label for="module-name">Nombre</label>
+        <input id="module-name" name="name" maxlength="150" required placeholder="Nombre del módulo" value="${escapeHTML(module?.name || "")}">
+      </div>
+      <div class="goriol-form-field">
+        <label for="module-description">Descripción</label>
+        <textarea id="module-description" name="description" maxlength="1000" placeholder="Descripción (opcional)">${escapeHTML(module?.description || "")}</textarea>
+      </div>
+      <div class="goriol-modal-actions">
+        <button type="button" class="goriol-small-button" data-close-module-form>Cancelar</button>
+        <button type="submit" class="button button-primary">${editing ? "Guardar cambios" : "Crear módulo"}</button>
+      </div>
+    </form>`);
+  $("#module-form").addEventListener("submit", async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const button = form.querySelector('button[type="submit"]');
+    const payload = {
+      code: form.elements.code.value.trim(),
+      name: form.elements.name.value.trim(),
+      description: form.elements.description.value.trim() || null
+    };
+    if (!payload.code || !payload.name) return toast("El código y el nombre son obligatorios.");
+    button.disabled = true;
+    button.textContent = "Guardando…";
+    try {
+      await api(editing ? "/modules/" + encodeURIComponent(module.id) : "/modules", {
+        method: editing ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      await refreshModulesAndStructure();
+      closeModal();
+      toast(editing ? "Módulo actualizado." : "Módulo creado correctamente.");
+    } catch (error) {
+      toast("No se ha podido guardar el módulo: " + error.message);
+      button.disabled = false;
+      button.textContent = editing ? "Guardar cambios" : "Crear módulo";
+    }
+  });
+}
+
+async function refreshModulesAndStructure() {
+  const [moduleResponse, raResponse, documentResponse] = await Promise.all([
+    api("/modules"), api("/learning-outcomes"), api("/documents")
+  ]);
+  const [moduleData, raData, documentData] = await Promise.all([
+    moduleResponse.json(), raResponse.json(), documentResponse.json()
+  ]);
+  modules = moduleData.modules || [];
+  learningOutcomes = raData.learning_outcomes || [];
+  documents = documentData.documents || [];
+  renderAll();
+}
+
+async function removeModule(moduleId) {
+  const module = modules.find(item => item.id === moduleId);
+  if (!module) return;
+  const raCount = getModuleRas(moduleId).length;
+  const docCount = moduleDocumentCount(moduleId);
+  const warning = raCount || docCount
+    ? ` Este módulo contiene ${raCount} RA y ${docCount} documentos asociados. Si la API no permite eliminarlo por sus relaciones, no se borrará nada.`
+    : "";
+  if (!window.confirm(`¿Seguro que quieres eliminar el módulo "${module.code} · ${module.name}"?${warning} Esta acción no se puede deshacer.`)) return;
+  try {
+    await api("/modules/" + encodeURIComponent(moduleId), { method: "DELETE" });
+    await refreshModulesAndStructure();
+    toast("Módulo eliminado.");
+    navigate("biblioteca");
+  } catch (error) {
+    toast("No se ha podido eliminar el módulo: " + error.message);
+  }
+}
+
 function showUploadPicker() {
   if (!learningOutcomes.length) {
     toast("Primero necesitas crear un resultado de aprendizaje.");
@@ -494,6 +585,12 @@ document.addEventListener("click", event => {
   if (moduleLink) { event.preventDefault(); openModule(moduleLink.dataset.moduleId); return; }
   const raButton = event.target.closest("[data-open-ra-id]");
   if (raButton) { openRa(raButton.dataset.openRaId); return; }
+  const editModuleButton = event.target.closest("[data-edit-module]");
+  if (editModuleButton) { event.preventDefault(); event.stopPropagation(); showModuleForm(editModuleButton.dataset.editModule); return; }
+  const deleteModuleButton = event.target.closest("[data-delete-module]");
+  if (deleteModuleButton) { event.preventDefault(); event.stopPropagation(); removeModule(deleteModuleButton.dataset.deleteModule); return; }
+  const closeModuleForm = event.target.closest("[data-close-module-form]");
+  if (closeModuleForm) { closeModal(); return; }
   const accordion = event.target.closest(".library-module-head");
   if (accordion) {
     const expanded = accordion.getAttribute("aria-expanded") === "true";
@@ -504,7 +601,8 @@ document.addEventListener("click", event => {
 });
 
 $("#upload-demo")?.addEventListener("click", showUploadPicker);
-$("#add-module")?.addEventListener("click", () => toast("La creación y edición de módulos la añadiremos en el siguiente paso."));
+$("#add-module")?.addEventListener("click", () => showModuleForm());
+
 $("#filter-all")?.addEventListener("click", () => {
   $$(".library-module").forEach(card => card.style.display = "");
   const search = $("#library-search");
